@@ -1,0 +1,9 @@
+@ShutdownOnFailedCommand 0
+@NoPromptForPassword 1
+
+login anonymous
+force_install_dir /server-base/content/css
+app_update 232330 validate
+force_install_dir /server-base
+app_update 4020 validate
+quit
