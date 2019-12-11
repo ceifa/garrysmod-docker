@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# UNION FILE SYSTEM
-unionfs-fuse -o cow /server-volume=RW:/server-base=RO /server-union
-
 if [ -n "${PRODUCTION}" ]; then
     MODE="production"
     # DISABLE AUTO LUA REFRESH IF PRODUCTION FLAG
@@ -12,8 +9,9 @@ else
 fi
 
 # START THE SERVER
-echo "Starting server on ${mode} mode..."
-/server-union/srcds_run \
+echo "Starting server on ${MODE} mode..."
+
+screen -A -m -S server /server/srcds_run \
     -game garrysmod \
     -norestart \
     -strictportbind \
@@ -24,5 +22,4 @@ echo "Starting server on ${mode} mode..."
     +maxplayers ${MAXPLAYERS} \
     +hostname "${HOSTNAME}" \
     +gamemode ${GAMEMODE} \
-    +map ${MAP} \
-    ${ARGS}
+    +map ${MAP} ${ARGS}
