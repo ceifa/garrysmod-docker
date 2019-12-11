@@ -19,7 +19,7 @@ screen -A -m -S server /server/srcds_run \
     -steam_dir "/steamcmd" \
     -steamcmd_script "/update.txt" \
     -port 27015 \
-    +maxplayers ${MAXPLAYERS} \
-    +hostname "${HOSTNAME}" \
-    +gamemode ${GAMEMODE} \
-    +map ${MAP} ${ARGS}
+    +maxplayers "${MAXPLAYERS}" \
+    +hostname \""${HOSTNAME}"\" \
+    +gamemode "${GAMEMODE}" \
+    +map "${MAP}" "${ARGS}"
