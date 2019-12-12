@@ -14,7 +14,6 @@ fi
 docker run \
     -p 27015:27015/udp \
     -p 27015:27015 \
-    -p 27005:27005 \
     -p 27005:27005/udp \
     -it \
     --name gmod-server \

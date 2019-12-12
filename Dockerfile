@@ -38,7 +38,6 @@ RUN echo '"mountcfg" {"cstrike" "/server/content/css/cstrike"}' > /server/garrys
 # https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity
 EXPOSE 27015
 EXPOSE 27015/udp
-EXPOSE 27005
 EXPOSE 27005/udp
 
 # SET ENVIRONMENT VARIABLES
