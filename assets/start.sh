@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -z "${HOSTNAME}" ]; then
+    ARGS="+hostname \"${HOSTNAME}\" ${ARGS}"
+fi
+
 if [ -n "${PRODUCTION}" ]; then
     MODE="production"
     # DISABLE AUTO LUA REFRESH IF PRODUCTION FLAG
@@ -20,6 +24,5 @@ screen -A -m -S server /server/srcds_run \
     -steamcmd_script "/update.txt" \
     -port 27015 \
     +maxplayers "${MAXPLAYERS}" \
-    +hostname \""${HOSTNAME}"\" \
     +gamemode "${GAMEMODE}" \
     +map "${MAP}" "${ARGS}"
