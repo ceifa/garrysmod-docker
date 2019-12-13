@@ -4,6 +4,10 @@ if [ -z "${HOSTNAME}" ]; then
     ARGS="+hostname \"${HOSTNAME}\" ${ARGS}"
 fi
 
+if [ -z "${MAXPLAYERS}" ]; then
+    ARGS="+maxplayers \"${MAXPLAYERS}\" ${ARGS}"
+fi
+
 if [ -n "${PRODUCTION}" ]; then
     MODE="production"
     # DISABLE AUTO LUA REFRESH IF PRODUCTION FLAG
@@ -23,6 +27,5 @@ screen -A -m -S server /server/srcds_run \
     -steam_dir "/steamcmd" \
     -steamcmd_script "/update.txt" \
     -port 27015 \
-    +maxplayers "${MAXPLAYERS}" \
     +gamemode "${GAMEMODE}" \
     +map "${MAP}" "${ARGS}"
