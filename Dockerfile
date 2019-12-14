@@ -57,4 +57,4 @@ ENV GAMEMODE="sandbox"
 ENV MAP="gm_construct"
 
 # START THE SERVER
-ENTRYPOINT ["/server/start.sh"]
+CMD ["/server/start.sh"]
