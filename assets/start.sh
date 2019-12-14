@@ -10,10 +10,10 @@ fi
 
 if [ -n "${PRODUCTION}" ]; then
     MODE="production"
-    # DISABLE AUTO LUA REFRESH IF PRODUCTION FLAG
     ARGS="-disableluarefresh ${ARGS}"
 else
     MODE="development"
+    ARGS="-debug"
 fi
 
 # START THE SERVER
