@@ -46,5 +46,5 @@ ENV GAMEMODE="sandbox"
 ENV MAP="gm_construct"
 
 # START THE SERVER
-ADD assets/start.sh /start.sh
-CMD ["/start.sh"]
+ADD assets/start.sh /server/start.sh
+CMD ["/server/start.sh"]
