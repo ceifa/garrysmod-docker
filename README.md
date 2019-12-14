@@ -1,4 +1,4 @@
-![Texto da propriedade alt](https://i.imgur.com/QEGv6GM.png "Propriedade title, opcional")
+[![Garry's mod containers](https://i.imgur.com/QEGv6GM.png "Garry's mod containers")][docker-hub-repo]
 
 # Garry's Mod server
 Run a Garry's Mod server easily inside a docker container
@@ -115,6 +115,8 @@ More examples can be found at [my real use case github repository][lory-repo].
 ## License
 
 View [license information](licence) for the software contained in this image.
+
+[docker-hub-repo]: https://hub.docker.com/r/ceifa/gmod-server "Docker hub repository"
 
 [srcds-connectivity]: https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity "Valve srcds connectivity documentation"
 
