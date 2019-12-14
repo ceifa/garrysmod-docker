@@ -2,8 +2,6 @@
 @NoPromptForPassword 1
 
 login anonymous
-force_install_dir /server/content/css
-app_update 232330 validate
 force_install_dir /server
 app_update 4020 validate
 quit

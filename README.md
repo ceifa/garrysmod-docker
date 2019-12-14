@@ -12,6 +12,7 @@ Run a Garry's Mod server easily inside a docker container
 * Run a server under an anonymous steam user
 * Run server commands normally
 * Installed CSS content
+* Check and update server automatically
 * Production and development build
 
 ## Documentation
@@ -56,7 +57,7 @@ It's not the full directory tree, I just put the ones I thought most important
 📦
 |__📁server // The server root
 |  |__📁content // All third party games should be installed here
-|  |  |__📁css // Counter strike: Source comes installed as default
+|  |  |__📁cstrike // Counter strike: Source comes installed as default
 |  |__📁garrysmod
 |  |  |__📁addons // Put your addons here
 |  |  |__📁gamemodes // Put your gamemodes here
