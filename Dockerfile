@@ -6,7 +6,7 @@ LABEL description="A structured Garry's Mod dedicated server under a ubuntu linu
 
 # INSTALL NECESSARY PACKAGES
 RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
-    wget libstdc++6 libstdc++6:i386 lib32gcc1 lib32stdc++6 lib32tinfo5 ca-certificates screen gdb tar bzip2 gzip unzip
+    wget lib32gcc1 lib32stdc++6 lib32tinfo5 ca-certificates screen gdb tar bzip2 gzip unzip
 
 # CLEAN UP
 RUN apt-get clean
