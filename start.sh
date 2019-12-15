@@ -16,8 +16,8 @@ docker run \
     -p 27015:27015 \
     -p 27005:27005/udp \
     -it \
-    --name gmod-server \
-    ceifa/gmod-server
+    --name "${NAME}" \
+    ceifa/"${NAME}"
 
 # WAIT FOR INPUT, USEFUL TO SEE UNEXPECTED ERRORS
 read
