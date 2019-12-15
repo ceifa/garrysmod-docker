@@ -8,7 +8,7 @@ if [ -z "${MAXPLAYERS}" ]; then
     ARGS="+maxplayers \"${MAXPLAYERS}\" ${ARGS}"
 fi
 
-if [ -n "${PRODUCTION}" ]; then
+if [ -n "${PRODUCTION}" ] && [ "${PRODUCTION}" -ne 0 ]; then
     MODE="production"
     ARGS="-disableluarefresh ${ARGS}"
 else
