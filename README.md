@@ -115,7 +115,7 @@ More examples can be found at [my real use case github repository][lory-repo].
 
 ## License
 
-View [license information](licence) for the software contained in this image.
+This image is under the [MIT license](licence).
 
 [docker-hub-repo]: https://hub.docker.com/r/ceifa/gmod-server "Docker hub repository"
 
