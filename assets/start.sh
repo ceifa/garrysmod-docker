@@ -1,10 +1,10 @@
 #!/bin/bash
 
-if [ -z "${HOSTNAME}" ]; then
-    ARGS="+hostname \"${HOSTNAME}\" ${ARGS}"
+if [ -n "${NAME}" ]; then
+    ARGS="+hostname \"${NAME}\" ${ARGS}"
 fi
 
-if [ -z "${MAXPLAYERS}" ]; then
+if [ -n "${MAXPLAYERS}" ]; then
     ARGS="-maxplayers \"${MAXPLAYERS}\" ${ARGS}"
 fi
 
