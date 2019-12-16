@@ -12,19 +12,14 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
 RUN apt-get clean
 RUN rm -rf /tmp/* /var/lib/apt/lists/*
 
-# PRE-SETUP DIRECTORIES AND FILES
-RUN mkdir /steamcmd \
-    && mkdir /server
-ADD assets/start.sh /server/start.sh
-
 # SET STEAM USER
+RUN mkdir server
 RUN groupadd steam \
     && useradd -m -r -g steam steam \
-    && chown -vR steam:steam /server /steamcmd \
-    && chmod +x /server/start.sh
-USER steam
+    && chown -vR steam:steam /server
 
 # INSTALL STEAMCMD
+RUN mkdir /steamcmd
 WORKDIR /steamcmd
 RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
 RUN tar -xvzf steamcmd_linux.tar.gz
@@ -44,6 +39,12 @@ RUN rm -rf /server/content/css
 
 # SET GMOD MOUNT CONTENT
 RUN echo '"mountcfg" {"cstrike" "/server/content/cstrike"}' > /server/garrysmod/cfg/mount.cfg
+
+# SETUP STARTUP SCRIPT
+ADD assets/start.sh /server/start.sh
+RUN chmod +x /server/start.sh
+
+USER steam
 
 # PORT FORWARDING
 # https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity
