@@ -5,7 +5,7 @@ if [ -z "${HOSTNAME}" ]; then
 fi
 
 if [ -z "${MAXPLAYERS}" ]; then
-    ARGS="+maxplayers \"${MAXPLAYERS}\" ${ARGS}"
+    ARGS="-maxplayers \"${MAXPLAYERS}\" ${ARGS}"
 fi
 
 if [ -n "${PRODUCTION}" ] && [ "${PRODUCTION}" -ne 0 ]; then

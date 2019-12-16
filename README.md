@@ -26,29 +26,29 @@ You can read more about these ports on the [official srcds documentation][srcds-
 
 ### Environment variables
 
-**`PRODUCTION`** (optional)
+**`PRODUCTION`**
 
 Set if the server should be opened in production mode. This will make hot reload modifications to lua files not working. Possible values are `0`(default) or `1`.
 
-**`HOSTNAME`** (optional)
+**`HOSTNAME`**
 
-Set the server name on startup. (optional)
+Set the server name on startup.
 
 **`MAXPLAYERS`**
 
-Set the maximum players allowed to join the server. (optional)
+Set the maximum players allowed to join the server. Default is `16`.
 
 **`GAMEMODE`**
 
-Set the server gamemode on startup.
+Set the server gamemode on startup. Default is `sandbox`.
 
 **`MAP`**
 
-Set the map gamemode on startup.
+Set the map gamemode on startup. Default is `gm_construct`.
 
 **`ARGS`**
 
-Set any other custom args you want to pass to srcds runner. (optional)
+Set any other custom args you want to pass to srcds runner.
 
 ### Directory structure
 It's not the full directory tree, I just put the ones I thought most important
