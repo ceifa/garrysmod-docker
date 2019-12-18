@@ -26,7 +26,7 @@ RUN tar -xvzf steamcmd_linux.tar.gz
 WORKDIR /
 
 # SETUP STEAMCMD TO DOWNLOAD GMOD SERVER
-ADD assets/update.txt /update.txt
+COPY assets/update.txt /update.txt
 RUN /steamcmd/steamcmd.sh +runscript /update.txt +quit
 
 # SETUP CSS CONTENT
@@ -39,10 +39,6 @@ RUN rm -rf /server/content/css
 
 # SET GMOD MOUNT CONTENT
 RUN echo '"mountcfg" {"cstrike" "/server/content/cstrike"}' > /server/garrysmod/cfg/mount.cfg
-
-# SETUP STARTUP SCRIPT
-ADD assets/start.sh /server/start.sh
-RUN chmod +x /server/start.sh
 
 USER steam
 
@@ -58,4 +54,5 @@ ENV GAMEMODE="sandbox"
 ENV MAP="gm_construct"
 
 # START THE SERVER
+COPY --chown=steam:steam assets/start.sh /server/start.sh
 CMD ["/server/start.sh"]
