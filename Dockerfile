@@ -13,13 +13,13 @@ RUN apt-get clean
 RUN rm -rf /tmp/* /var/lib/apt/lists/*
 
 # SET STEAM USER
-RUN mkdir server
+RUN mkdir server && mkdir /steamcmd
 RUN groupadd steam \
     && useradd -m -r -g steam steam \
-    && chown -vR steam:steam /server
+    && chown -vR steam:steam /server /steamcmd
+USER steam
 
 # INSTALL STEAMCMD
-RUN mkdir /steamcmd
 WORKDIR /steamcmd
 RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
 RUN tar -xvzf steamcmd_linux.tar.gz
@@ -39,8 +39,6 @@ RUN rm -rf /server/content/css
 
 # SET GMOD MOUNT CONTENT
 RUN echo '"mountcfg" {"cstrike" "/server/content/cstrike"}' > /server/garrysmod/cfg/mount.cfg
-
-USER steam
 
 # PORT FORWARDING
 # https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity
