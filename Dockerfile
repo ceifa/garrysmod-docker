@@ -51,6 +51,9 @@ ENV MAXPLAYERS="16"
 ENV GAMEMODE="sandbox"
 ENV MAP="gm_construct"
 
+# ADD START SCRIPT
+COPY --chown=steam:steam assets/start.sh /server/start.sh
+RUN chmod +x /server/start.sh
+
 # START THE SERVER
-COPY --chown=steam assets/start.sh /server/start.sh
 CMD ["/server/start.sh"]
