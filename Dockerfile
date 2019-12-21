@@ -52,5 +52,5 @@ ENV GAMEMODE="sandbox"
 ENV MAP="gm_construct"
 
 # START THE SERVER
-COPY --chown=steam:steam assets/start.sh /server/start.sh
+COPY --chown=steam assets/start.sh /server/start.sh
 CMD ["/server/start.sh"]
