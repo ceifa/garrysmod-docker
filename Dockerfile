@@ -6,7 +6,7 @@ LABEL description="A structured Garry's Mod dedicated server under a ubuntu linu
 
 # INSTALL NECESSARY PACKAGES
 RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
-    wget lib32gcc1 lib32stdc++6 lib32tinfo5 ca-certificates screen gdb tar bzip2 gzip unzip
+    wget lib32gcc1 lib32stdc++6 lib32tinfo5 ca-certificates screen gdb tar bzip2 gzip unzip rsync
 
 # CLEAN UP
 RUN apt-get clean
@@ -42,7 +42,8 @@ RUN echo '"mountcfg" {"cstrike" "/server/content/cstrike"}' > /server/garrysmod/
 
 # CREATE DATABASE FILE LINK
 RUN mkdir /server/garrysmod/database/
-RUN ln -sf /server/garrysmod/sv.db /server/garrysmod/database/
+RUN touch /server/garrysmod/sv.db
+RUN rsync -zvh /server/garrysmod/sv.db /server/garrysmod/database/
 
 # PORT FORWARDING
 # https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity
