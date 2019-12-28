@@ -40,6 +40,9 @@ RUN rm -rf /server/content/css
 # SET GMOD MOUNT CONTENT
 RUN echo '"mountcfg" {"cstrike" "/server/content/cstrike"}' > /server/garrysmod/cfg/mount.cfg
 
+# CREATE DB FILE (useful if binding as a shared volume)
+RUN touch /server/garrysmod/sv.db
+
 # PORT FORWARDING
 # https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity
 EXPOSE 27015
