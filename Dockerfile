@@ -40,10 +40,8 @@ RUN rm -rf /server/content/css
 # SET GMOD MOUNT CONTENT
 RUN echo '"mountcfg" {"cstrike" "/server/content/cstrike"}' > /server/garrysmod/cfg/mount.cfg
 
-# CREATE DATABASE FILE LINK
-RUN mkdir /server/garrysmod/database/
+# CREATE DATABASE FILE
 RUN touch /server/garrysmod/sv.db
-RUN rsync -zvh /server/garrysmod/sv.db /server/garrysmod/database/
 
 # PORT FORWARDING
 # https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity
