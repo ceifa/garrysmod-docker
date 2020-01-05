@@ -53,6 +53,7 @@ EXPOSE 27005/udp
 ENV MAXPLAYERS="16"
 ENV GAMEMODE="sandbox"
 ENV MAP="gm_construct"
+ENV PORT="27015"
 
 # ADD START SCRIPT
 COPY --chown=steam:steam assets/start.sh /server/start.sh

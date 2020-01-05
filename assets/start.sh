@@ -25,6 +25,6 @@ screen -A -m -S server /server/srcds_run \
     -autoupdate \
     -steam_dir "/steamcmd" \
     -steamcmd_script "/update.txt" \
-    -port 27015 \
+    -port "${PORT}" \
     +gamemode "${GAMEMODE}" \
     +map "${MAP}" "${ARGS}"

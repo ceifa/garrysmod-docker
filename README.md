@@ -46,6 +46,10 @@ Set the server gamemode on startup. Default is `sandbox`.
 
 Set the map gamemode on startup. Default is `gm_construct`.
 
+**`PORT`**
+
+Set the server port on container. Default is `27015`.
+
 **`ARGS`**
 
 Set any other custom args you want to pass to srcds runner.
