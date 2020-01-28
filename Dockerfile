@@ -14,8 +14,8 @@ RUN rm -rf /tmp/* /var/lib/apt/lists/*
 
 # SET STEAM USER
 RUN mkdir server && mkdir /steamcmd
-RUN groupadd steam \
-    && useradd -m -r -g steam steam \
+RUN groupadd -g 1337 steam \
+    && useradd -m -r -g 1337 steam \
     && chown -vR steam:steam /server /steamcmd
 USER steam
 
