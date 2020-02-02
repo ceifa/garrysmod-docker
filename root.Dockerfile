@@ -12,13 +12,6 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
 RUN apt-get clean
 RUN rm -rf /tmp/* /var/lib/apt/lists/*
 
-# SET STEAM USER
-RUN mkdir server && mkdir /steamcmd
-RUN groupadd -g 1337 steam \
-    && useradd -m -r -g 1337 steam \
-    && chown -vR steam:steam /server /steamcmd
-USER steam
-
 # INSTALL STEAMCMD
 WORKDIR /steamcmd
 RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
@@ -59,7 +52,7 @@ ENV MAP="gm_construct"
 ENV PORT="27015"
 
 # ADD START SCRIPT
-COPY --chown=steam:steam assets/start.sh /server/start.sh
+COPY assets/start.sh /server/start.sh
 RUN chmod +x /server/start.sh
 
 # START THE SERVER
