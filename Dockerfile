@@ -24,13 +24,12 @@ WORKDIR /steamcmd
 RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
 RUN tar -xvzf steamcmd_linux.tar.gz
 WORKDIR /
-
-# SET VOLUMES
-VOLUME [ "/steamcmd/appdir", "/server/garrysmod/cache" ]
+VOLUME [ "/steamcmd/appdir" ]
 
 # SETUP STEAMCMD TO DOWNLOAD GMOD SERVER
 COPY assets/update.txt /update.txt
 RUN /steamcmd/steamcmd.sh +runscript /update.txt +quit
+VOLUME [ "/server/garrysmod/cache" ]
 
 # SETUP CSS CONTENT
 RUN /steamcmd/steamcmd.sh +login anonymous \
