@@ -5,7 +5,7 @@ LABEL maintainer="ceifa"
 LABEL description="A structured Garry's Mod dedicated server under a ubuntu linux image"
 
 # INSTALL NECESSARY PACKAGES
-RUN dpkg --add-architecture i386 \
+RUN dpkg --add-architecture i386
 RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
     wget gcc g++ libcurl3-gnutls:i386 lib32ncurses5 lib32gcc1 lib32stdc++6 lib32tinfo5 libtinfo5:i386 libncurses5:i386 ca-certificates screen tar bzip2 gzip unzip gdb
 
