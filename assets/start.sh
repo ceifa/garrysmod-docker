@@ -13,6 +13,7 @@ if [ -n "${PRODUCTION}" ] && [ "${PRODUCTION}" -ne 0 ]; then
     ARGS="-disableluarefresh ${ARGS}"
 else
     MODE="development"
+    ARGS="-gdb gdb -debug ${ARGS}"
 fi
 
 # START THE SERVER
