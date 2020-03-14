@@ -1,12 +1,12 @@
 # BASE IMAGE
-FROM ubuntu:bionic
+FROM debian:buster-slim
 
 LABEL maintainer="ceifa"
 LABEL description="A structured Garry's Mod dedicated server under a ubuntu linux image"
 
 # INSTALL NECESSARY PACKAGES
-RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
-    wget lib32ncurses5 lib32gcc1 lib32stdc++6 lib32tinfo5 ca-certificates screen tar bzip2 gzip unzip gdb
+RUN dpkg --add-architecture i386 && apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
+    wget lib32gcc1 lib32stdc++6 ca-certificates screen tar bzip2 gzip unzip gdb
 
 # CLEAN UP
 RUN apt-get clean
