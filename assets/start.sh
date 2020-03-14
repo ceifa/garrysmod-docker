@@ -4,8 +4,8 @@ if [ -n "${NAME}" ]; then
     ARGS="+hostname \"${NAME}\" ${ARGS}"
 fi
 
-if [ -n "${MAXPLAYERS}" ]; then
-    ARGS="-maxplayers \"${MAXPLAYERS}\" ${ARGS}"
+if [ -n "${AUTHKEY}" ]; then
+    ARGS="-authkey \"${AUTHKEY}\" ${ARGS}"
 fi
 
 if [ -n "${PRODUCTION}" ] && [ "${PRODUCTION}" -ne 0 ]; then
@@ -27,5 +27,6 @@ screen -A -m -S server /server/srcds_run \
     -steam_dir "/steamcmd" \
     -steamcmd_script "/update.txt" \
     -port "${PORT}" \
+    -maxplayers "${MAXPLAYERS}" \
     +gamemode "${GAMEMODE}" \
     +map "${MAP}" "${ARGS}"

@@ -51,6 +51,10 @@ Set the map gamemode on startup. Default is `gm_construct`.
 
 Set the server port on container. Default is `27015`.
 
+**`AUTHKEY`**
+
+Set the server auth key to be used.
+
 **`ARGS`**
 
 Set any other custom args you want to pass to srcds runner.
