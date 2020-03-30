@@ -100,7 +100,7 @@ docker run \
     -p 27015:27015/udp \
     -p 27015:27015 \
     -p 27005:27005/udp \
-    -e ARGS="+host_workshop_collection 382793424"
+    -e ARGS="+host_workshop_collection 382793424" \
     -it \
     ceifa/gmod-server
 ```
@@ -111,11 +111,11 @@ docker run \
     -p 27015:27015/udp \
     -p 27015:27015 \
     -p 27005:27005/udp \
-    -v ./addons:/server/garrysmod/addons
-    -v ./gamemodes:/server/garrysmod/gamemodes
-    -e HOSTNAME="my server"
-    -e PRODUCTION=1
-    -e GAMEMODE=darkrp
+    -v ./addons:/server/garrysmod/addons \
+    -v ./gamemodes:/server/garrysmod/gamemodes \
+    -e HOSTNAME="my server" \
+    -e PRODUCTION=1 \
+    -e GAMEMODE=darkrp \
     -it \
     ceifa/gmod-server
 ```
