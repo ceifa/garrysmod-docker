@@ -6,6 +6,7 @@ Run a Garry's Mod server easily inside a docker container
 ## Supported tags
 * `latest` - the most recent production-ready image
 * `root` - run server as root user
+* `ubuntu` - run latest version on ubuntu instead debian
 
 ## Features
 
