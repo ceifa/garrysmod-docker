@@ -1,6 +1,5 @@
 #!/bin/bash
 sleep 1
-export INTERNAL_IP=`ip route get 1 | awk '{print $NF;exit}'`
 
 if [ -n "${NAME}" ]; then
     ARGS="+hostname \"${NAME}\" ${ARGS}"
