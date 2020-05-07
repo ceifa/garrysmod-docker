@@ -138,7 +138,7 @@ More examples can be found at [my real use case github repository][lory-repo].
 
 ## Health Check
 
-This image contains mc-monitor and uses its status command to continually check on the container's. That can be observed from the STATUS column of docker ps
+This image contains a health check to continually ensure the server is online. That can be observed from the STATUS column of docker ps
 
 CONTAINER ID        IMAGE                    COMMAND                 CREATED             STATUS                    PORTS                                                                                     NAMES
 e9c073a4b262        ceifa/gmod-server        "/home/gmod/start.sh"   21 minutes ago      Up 21 minutes (healthy)   0.0.0.0:27005->27005/tcp, 27005/udp, 0.0.0.0:27015->27015/tcp, 0.0.0.0:27015->27015/udp   distracted_cerf
