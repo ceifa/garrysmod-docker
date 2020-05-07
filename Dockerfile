@@ -2,46 +2,50 @@
 FROM debian:buster-slim
 
 LABEL maintainer="ceifa"
-LABEL description="A structured Garry's Mod dedicated server under a ubuntu linux image"
+LABEL description="A structured Garry's Mod dedicated server under a debian linux image"
 
+ENV DEBIAN_FRONTEND noninteractive
 # INSTALL NECESSARY PACKAGES
 RUN dpkg --add-architecture i386 && apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
-    wget lib32gcc1 lib32stdc++6 ca-certificates screen tar bzip2 gzip unzip gdb
+    wget ca-certificates tar gcc g++ lib32gcc1 libgcc1 libcurl4-gnutls-dev:i386 libssl1.1 libcurl4:i386 libtinfo5 lib32z1 lib32stdc++6 libncurses5:i386 libcurl3-gnutls:i386 gdb libsdl1.2debian libfontconfig net-tools
 
 # CLEAN UP
 RUN apt-get clean
 RUN rm -rf /tmp/* /var/lib/apt/lists/*
 
 # SET STEAM USER
-RUN mkdir server && mkdir /steamcmd
-RUN groupadd -g 1337 steam \
-    && useradd -m -r -g 1337 steam \
-    && chown -vR steam:steam /server /steamcmd
+RUN useradd -d /home/gmod -m steam
 USER steam
+RUN mkdir /home/gmod/server && mkdir /home/gmod/steamcmd
 
 # INSTALL STEAMCMD
-WORKDIR /steamcmd
-RUN wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
-RUN tar -xvzf steamcmd_linux.tar.gz
-WORKDIR /
+RUN wget -P /home/gmod/steamcmd/ https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz \
+    && tar -xvzf /home/gmod/steamcmd/steamcmd_linux.tar.gz -C /home/gmod/steamcmd \
+    && rm -rf /home/gmod/steamcmd/steamcmd_linux.tar.gz
 
 # SETUP STEAMCMD TO DOWNLOAD GMOD SERVER
-COPY assets/update.txt /update.txt
-RUN /steamcmd/steamcmd.sh +runscript /update.txt +quit
+COPY assets/update.txt /home/gmod/update.txt
+RUN /home/gmod/steamcmd/steamcmd.sh +runscript /home/gmod/update.txt +quit
 
 # SETUP CSS CONTENT
-RUN /steamcmd/steamcmd.sh +login anonymous \
-    +force_install_dir /server/content/css \
+RUN /home/gmod/steamcmd/steamcmd.sh +login anonymous \
+    +force_install_dir /home/gmod/temp \
     +app_update 232330 validate \
     +quit
-RUN mv /server/content/css/cstrike /server/content
-RUN rm -rf /server/content/css
+RUN mkdir /home/gmod/mounts && mv /home/gmod/temp/cstrike /home/gmod/mounts/cstrike
+RUN rm -rf /home/gmod/temp
+
+# SETUP BINARIES FOR x32 and x64 bits
+RUN mkdir -p /home/gmod/.steam/sdk32 \
+    && cp -v /home/gmod/steamcmd/linux32/steamclient.so /home/gmod/.steam/sdk32/steamclient.so \
+    && mkdir -p /home/gmod/.steam/sdk64 \
+    && cp -v /home/gmod/steamcmd/linux64/steamclient.so /home/gmod/.steam/sdk64/steamclient.so
 
 # SET GMOD MOUNT CONTENT
-RUN echo '"mountcfg" {"cstrike" "/server/content/cstrike"}' > /server/garrysmod/cfg/mount.cfg
+RUN echo '"mountcfg" {"cstrike" "/home/gmod/mounts/cstrike"}' > /home/gmod/server/garrysmod/cfg/mount.cfg
 
 # CREATE DATABASE FILE
-RUN touch /server/garrysmod/sv.db
+RUN touch /home/gmod/server/garrysmod/sv.db
 
 # PORT FORWARDING
 # https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity
@@ -56,8 +60,13 @@ ENV MAP="gm_construct"
 ENV PORT="27015"
 
 # ADD START SCRIPT
-COPY --chown=steam:steam assets/start.sh /server/start.sh
-RUN chmod +x /server/start.sh
+COPY --chown=steam:steam assets/start.sh /home/gmod/start.sh
+RUN chmod +x /home/gmod/start.sh
+
+# CREATE HEALTH CHECK
+COPY assets/health.sh /home/gmod/health.sh
+HEALTHCHECK --start-period=10s \
+    CMD /home/gmod/health.sh
 
 # START THE SERVER
-CMD ["/server/start.sh"]
+CMD ["/home/gmod/start.sh"]

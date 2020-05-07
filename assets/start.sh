@@ -1,7 +1,13 @@
 #!/bin/bash
+sleep 1
+export INTERNAL_IP=`ip route get 1 | awk '{print $NF;exit}'`
 
 if [ -n "${NAME}" ]; then
     ARGS="+hostname \"${NAME}\" ${ARGS}"
+fi
+
+if [ -n "${GSLT}" ]; then
+    ARGS="+sv_setsteamaccount \"${GSLT}\" ${ARGS}"
 fi
 
 if [ -n "${AUTHKEY}" ]; then
@@ -19,13 +25,13 @@ fi
 # START THE SERVER
 echo "Starting server on ${MODE} mode..."
 
-screen -A -m -S server /server/srcds_run \
+/home/gmod/server/srcds_run \
     -game garrysmod \
     -norestart \
     -strictportbind \
     -autoupdate \
-    -steam_dir "/steamcmd" \
-    -steamcmd_script "/update.txt" \
+    -steam_dir "/home/gmod/steamcmd" \
+    -steamcmd_script "/home/gmod/update.txt" \
     -port "${PORT}" \
     -maxplayers "${MAXPLAYERS}" \
     +gamemode "${GAMEMODE}" \

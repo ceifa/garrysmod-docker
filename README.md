@@ -5,8 +5,6 @@ Run a Garry's Mod server easily inside a docker container
 
 ## Supported tags
 * `latest` - the most recent production-ready image
-* `root` - run server as root user
-* `ubuntu` - run latest version on ubuntu instead debian
 
 ## Features
 
@@ -52,9 +50,9 @@ Set the map gamemode on startup. Default is `gm_construct`.
 
 Set the server port on container. Default is `27015`.
 
-**`AUTHKEY`**
+**`GSLT`**
 
-Set the server auth key to be used.
+Set the server GSLT credential to be used.
 
 **`ARGS`**
 
@@ -64,10 +62,11 @@ Set any other custom args you want to pass to srcds runner.
 It's not the full directory tree, I just put the ones I thought most important
 
 ```cs
-📦
-|__📁server // The server root
-|  |__📁content // All third party games should be installed here
+📦 /home/gmod // The server root
+|__📁steamcmd // Steam cmd, used to update the server when needed
+|__📁mounts // All third party games should be installed here
 |  |  |__📁cstrike // Counter strike: Source comes installed as default
+|__📁server
 |  |__📁garrysmod
 |  |  |__📁addons // Put your addons here
 |  |  |__📁gamemodes // Put your gamemodes here
@@ -112,8 +111,8 @@ docker run \
     -p 27015:27015/udp \
     -p 27015:27015 \
     -p 27005:27005/udp \
-    -v ./addons:/server/garrysmod/addons \
-    -v ./gamemodes:/server/garrysmod/gamemodes \
+    -v $PWD/addons:/home/gmod/server/garrysmod/addons \
+    -v $PWD/gamemodes:/home/gmod/server/garrysmod/gamemodes \
     -e HOSTNAME="my server" \
     -e PRODUCTION=1 \
     -e GAMEMODE=darkrp \
@@ -121,7 +120,35 @@ docker run \
     ceifa/gmod-server
 ```
 
+You can create a new docker image using this image as base too:
+
+```dockerfile
+FROM ceifa/gmod-server:latest
+
+COPY ./deathrun-addons /home/gmod/server/garrysmod/addons
+
+ENV NAME="Lory | Deathrun ~ Have fun!"
+ENV ARGS="+host_workshop_collection 382793424"
+ENV MAP="deathrun_atomic_warfare"
+ENV GAMEMODE="deathrun"
+ENV MAXPLAYERS="24"
+```
+
 More examples can be found at [my real use case github repository][lory-repo].
+
+## Health Check
+
+This image contains mc-monitor and uses its status command to continually check on the container's. That can be observed from the STATUS column of docker ps
+
+CONTAINER ID        IMAGE                    COMMAND                 CREATED             STATUS                    PORTS                                                                                     NAMES
+e9c073a4b262        ceifa/gmod-server        "/home/gmod/start.sh"   21 minutes ago      Up 21 minutes (healthy)   0.0.0.0:27005->27005/tcp, 27005/udp, 0.0.0.0:27015->27015/tcp, 0.0.0.0:27015->27015/udp   distracted_cerf
+
+You can also query the container's health in a script friendly way:
+
+```sh
+> docker container inspect -f "{{.State.Health.Status}}" e9c073a4b262
+healthy
+```
 
 ## License
 
