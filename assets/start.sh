@@ -1,6 +1,4 @@
 #!/bin/bash
-sleep 1
-
 if [ -n "${NAME}" ]; then
     ARGS="+hostname \"${NAME}\" ${ARGS}"
 fi
