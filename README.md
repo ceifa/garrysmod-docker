@@ -6,6 +6,7 @@ Run a Garry's Mod server easily inside a docker container
 ## Supported tags
 * `latest` - the most recent production-ready image, based on `debian`
 * `debian` - a gmod server based on debian
+* `debian-x64` - (NOT STABLE YET) a gmod server based on debian but running on beta version of srcds for x64 bit CPUs
 * `debian-root` - same as `debian` but executed as root user
 * `debian-post` - same as `debian` but the server is installed with the container starting
 * `debian-post-root` - same as `debian-post` but executed as root user
@@ -160,6 +161,10 @@ healthy
 ## License
 
 This image is under the [MIT license](licence).
+
+## TODO:
+
+* Add multi-stages to build
 
 [docker-hub-repo]: https://hub.docker.com/r/ceifa/gmod-server "Docker hub repository"
 
