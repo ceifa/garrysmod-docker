@@ -1,9 +1,11 @@
 NAME="gmod-server"
 
 # CHECK IF CONTAINER ALREADY EXISTS
-if [ "$(docker ps -a -q -f name="${NAME}" --format '{{.Names}}')" == "${NAME}" ]; then
+if [ "$(docker ps -a -q -f name="${NAME}" --format '{{.Names}}')" == "${NAME}" ];
+then
     # CHECK IF THE CONTAINER IS RUNNING
-    if [ "$(docker ps -q -f name="${NAME}" --format '{{.Names}}')" == "${NAME}" ]; then
+    if [ "$(docker ps -q -f name="${NAME}" --format '{{.Names}}')" == "${NAME}" ];
+    then
         docker stop "${NAME}" -t 0
     fi
 

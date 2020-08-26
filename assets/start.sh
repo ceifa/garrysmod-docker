@@ -1,17 +1,21 @@
 #!/bin/bash
-if [ -n "${NAME}" ]; then
+if [ -n "${NAME}" ];
+then
     ARGS="+hostname \"${NAME}\" ${ARGS}"
 fi
 
-if [ -n "${GSLT}" ]; then
+if [ -n "${GSLT}" ];
+then
     ARGS="+sv_setsteamaccount \"${GSLT}\" ${ARGS}"
 fi
 
-if [ -n "${AUTHKEY}" ]; then
+if [ -n "${AUTHKEY}" ];
+then
     ARGS="-authkey \"${AUTHKEY}\" ${ARGS}"
 fi
 
-if [ -n "${PRODUCTION}" ] && [ "${PRODUCTION}" -ne 0 ]; then
+if [ -n "${PRODUCTION}" ] && [ "${PRODUCTION}" -ne 0 ];
+then
     MODE="production"
     ARGS="-disableluarefresh ${ARGS}"
 else
