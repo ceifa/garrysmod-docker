@@ -64,6 +64,7 @@ RUN chmod +x /home/gmod/start.sh
 
 # CREATE HEALTH CHECK
 COPY assets/health.sh /home/gmod/health.sh
+RUN chmod +x /home/gmod/health.sh
 HEALTHCHECK --start-period=10s \
     CMD /home/gmod/health.sh
 

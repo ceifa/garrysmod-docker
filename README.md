@@ -4,7 +4,12 @@
 Run a Garry's Mod server easily inside a docker container
 
 ## Supported tags
-* `latest` - the most recent production-ready image
+* `latest` - the most recent production-ready image, based on `debian`
+* `debian` - a gmod server based on debian
+* `debian-root` - same as `debian` but executed as root user
+* `debian-post` - same as `debian` but the server is installed with the container starting
+* `debian-post-root` - same as `debian-post` but executed as root user
+* `ubuntu` - a gmod server based on ubuntu
 
 ## Features
 
