@@ -24,7 +24,7 @@ RUN wget -P /home/gmod/steamcmd/ https://steamcdn-a.akamaihd.net/client/installe
     && rm -rf /home/gmod/steamcmd/steamcmd_linux.tar.gz
 
 # SETUP STEAMCMD TO DOWNLOAD GMOD SERVER
-COPY assets/update.txt /home/gmod/update-x64.txt
+COPY assets/update-x64.txt /home/gmod/update.txt
 RUN /home/gmod/steamcmd/steamcmd.sh +runscript /home/gmod/update.txt +quit
 
 # SETUP CSS CONTENT
