@@ -26,7 +26,7 @@ fi
 # START THE SERVER
 echo "Starting server on ${MODE} mode..."
 
-/home/gmod/server/srcds_run \
+/home/gmod/server/srcds_run_x64 \
     -game garrysmod \
     -norestart \
     -strictportbind \

@@ -58,7 +58,7 @@ ENV MAP="gm_construct"
 ENV PORT="27015"
 
 # ADD START SCRIPT
-COPY --chown=steam:steam assets/start.sh /home/gmod/start.sh
+COPY --chown=steam:steam assets/start-x64.sh /home/gmod/start.sh
 RUN chmod +x /home/gmod/start.sh
 
 # CREATE HEALTH CHECK
