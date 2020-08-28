@@ -166,7 +166,7 @@ This image is under the [MIT license](licence).
 
 * Add multi-stages to build
 
-[docker-hub-repo]: https://hub.docker.com/r/ceifa/gmod-server "Docker hub repository"
+[docker-hub-repo]: https://hub.docker.com/r/ceifa/garrysmod "Docker hub repository"
 
 [srcds-connectivity]: https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity "Valve srcds connectivity documentation"
 
@@ -174,4 +174,4 @@ This image is under the [MIT license](licence).
 
 [lory-repo]: https://github.com/ceifa/lory-gmod-servers "Lory server repository"
 
-[licence]: https://github.com/ceifa/gmod-server-docker/blob/master/LICENSE "Licence of use"
+[licence]: https://github.com/ceifa/garrysmod-docker/blob/master/LICENSE "Licence of use"

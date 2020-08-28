@@ -1,4 +1,4 @@
-NAME="gmod-server"
+NAME="garrysmod"
 
 # CHECK IF CONTAINER ALREADY EXISTS
 if [ "$(docker ps -a -q -f name="${NAME}" --format '{{.Names}}')" == "${NAME}" ];

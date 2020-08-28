@@ -7,7 +7,7 @@ LABEL description="A structured Garry's Mod dedicated server under a debian linu
 ENV DEBIAN_FRONTEND noninteractive
 # INSTALL NECESSARY PACKAGES
 RUN dpkg --add-architecture i386 && apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
-    wget ca-certificates tar gcc g++ libgcc1 libssl1.1 libtinfo5 lib32z1 gdb libsdl1.2debian libfontconfig net-tools
+    wget ca-certificates tar gcc g++ libgcc1 libssl1.1 libtinfo5 lib32z1 gdb libsdl1.2debian libfontconfig net-tools unzip
 
 # CLEAN UP
 RUN apt-get clean
