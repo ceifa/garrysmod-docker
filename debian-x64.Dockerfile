@@ -45,6 +45,9 @@ RUN echo '"mountcfg" {"cstrike" "/home/gmod/mounts/cstrike"}' > /home/gmod/serve
 # CREATE DATABASE FILE
 RUN touch /home/gmod/server/garrysmod/sv.db
 
+# CREATE CACHE FOLDERS
+RUN mkdir -p /home/gmod/server/steam_cache/content && mkdir -p /home/gmod/server/garrysmod/cache/srcds
+
 # PORT FORWARDING
 # https://developer.valvesoftware.com/wiki/Source_Dedicated_Server#Connectivity
 EXPOSE 27015
