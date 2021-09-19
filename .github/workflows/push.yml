@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag garrysmod:latest
+      run: docker build . --file debian-x64-root.Dockerfile --tag garrysmod:latest
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v1
@@ -27,4 +27,4 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ceifa/garrysmod:latest
+        tags: ceifa/garrysmod:debian-x64-root
