@@ -8,8 +8,8 @@ Run a Garry's Mod server easily inside a docker container
 * `debian` - a gmod server based on debian
 * `debian-x64` - (NOT STABLE YET) a gmod server based on debian but running on beta version of srcds for x64 bit CPUs
 * `debian-root` - same as `debian` but executed as root user
+* `debian-x64-root` - same as `debian-x64` but executed as root user
 * `debian-post` - same as `debian` but the server is installed with the container starting
-* `debian-post-root` - same as `debian-post` but executed as root user
 * `ubuntu` - a gmod server based on ubuntu
 
 ## Features
