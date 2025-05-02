@@ -6,6 +6,11 @@ on:
   schedule:
     - cron: 0 0 1 * *  
   workflow_dispatch:
+    inputs:
+      dockerfile:
+          description: 'Docker file to build'
+          default: ''
+          type: string
 
 jobs:
 
@@ -14,16 +19,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Log in to Docker Hub
-      uses: docker/login-action@v1
+      uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push debian image
-      uses: docker/build-push-action@v2
+      if: ${{ github.event_name != 'workflow_dispatch' }}
+      uses: docker/build-push-action@v6
       with:
         push: true
         tags: |
@@ -32,8 +38,17 @@ jobs:
         file: debian.Dockerfile
 
     - name: Push debian-x64-root image
-      uses: docker/build-push-action@v2
+      if: ${{ github.event_name != 'workflow_dispatch' }}
+      uses: docker/build-push-action@v6
       with:
         push: true
         tags: ceifa/garrysmod:debian-x64-root
         file: debian-x64-root.Dockerfile
+
+    - name: Push manual image
+      if: ${{ github.event_name == 'workflow_dispatch' }}
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: ceifa/garrysmod:${{ github.event.inputs.dockerfile }}
+        file: ${{ github.event.inputs.dockerfile }}.Dockerfile
