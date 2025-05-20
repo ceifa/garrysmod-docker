@@ -97,7 +97,7 @@ docker run \
     -p 27005:27005/udp \
     --name gmod-server \
     -it \
-    ceifa/gmod-server
+    ceifa/garrysmod:latest
 ```
 
 This will start a server with host workshop collection pointing to [382793424][workshop-example] named `gmod-server`:
@@ -108,7 +108,7 @@ docker run \
     -p 27005:27005/udp \
     -e ARGS="+host_workshop_collection 382793424" \
     -it \
-    ceifa/gmod-server
+    ceifa/garrysmod:latest
 ```
 
 This will start a server named `my server` in production mode pointing to a local addons with a custom gamemode:
@@ -123,13 +123,13 @@ docker run \
     -e PRODUCTION=1 \
     -e GAMEMODE=darkrp \
     -it \
-    ceifa/gmod-server
+    ceifa/garrysmod:latest
 ```
 
 You can create a new docker image using this image as base too:
 
 ```dockerfile
-FROM ceifa/gmod-server:latest
+FROM ceifa/garrysmod:latest
 
 COPY ./deathrun-addons /home/gmod/server/garrysmod/addons
 
@@ -148,7 +148,7 @@ This image contains a health check to continually ensure the server is online. T
 
 ```sh
 CONTAINER ID        IMAGE                    COMMAND                 CREATED             STATUS                    PORTS                                                                                     NAMES
-e9c073a4b262        ceifa/gmod-server        "/home/gmod/start.sh"   21 minutes ago      Up 21 minutes (healthy)   0.0.0.0:27005->27005/tcp, 27005/udp, 0.0.0.0:27015->27015/tcp, 0.0.0.0:27015->27015/udp   distracted_cerf
+e9c073a4b262        ceifa/garrysmod:latest        "/home/gmod/start.sh"   21 minutes ago      Up 21 minutes (healthy)   0.0.0.0:27005->27005/tcp, 27005/udp, 0.0.0.0:27015->27015/tcp, 0.0.0.0:27015->27015/udp   distracted_cerf
 ```
 
 You can also query the container's health in a script friendly way:
