@@ -1,0 +1,3 @@
+# Only assets/ is COPYed into images; exclude everything else from the context.
+*
+!assets

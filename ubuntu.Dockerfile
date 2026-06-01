@@ -1,16 +1,20 @@
 # BASE IMAGE
-FROM ubuntu:bionic
+FROM ubuntu:26.04
 
 LABEL maintainer="ceifa"
 LABEL description="A structured Garry's Mod dedicated server under a ubuntu linux image"
 
-# INSTALL NECESSARY PACKAGES
-RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
-    wget lib32ncurses5 lib32gcc1 lib32stdc++6 lib32tinfo5 ca-certificates screen tar bzip2 gzip unzip gdb
-
-# CLEAN UP
-RUN apt-get clean
-RUN rm -rf /tmp/* /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=noninteractive
+# INSTALL NECESSARY PACKAGES (same i386 set as the Debian image; 24.04+ kept the
+# transitional names through the t64 transition).
+RUN dpkg --add-architecture i386 \
+    && apt-get update \
+    && apt-get -y --no-install-recommends --no-install-suggests install \
+        wget ca-certificates tar lib32gcc-s1 libgcc-s1 libcurl4-gnutls-dev:i386 \
+        libcurl4:i386 libtinfo6:i386 lib32z1 lib32stdc++6 libncurses6:i386 \
+        libcurl3-gnutls:i386 gdb libsdl2-2.0-0:i386 libfontconfig1 net-tools unzip \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/lib/apt/lists/*
 
 # SET STEAM USER
 RUN useradd -d /home/gmod -m steam
@@ -27,8 +31,9 @@ COPY assets/update.txt /home/gmod/update.txt
 RUN /home/gmod/steamcmd/steamcmd.sh +runscript /home/gmod/update.txt +quit
 
 # SETUP CSS CONTENT
-RUN /home/gmod/steamcmd/steamcmd.sh +login anonymous \
+RUN /home/gmod/steamcmd/steamcmd.sh \
     +force_install_dir /home/gmod/temp \
+    +login anonymous \
     +app_update 232330 validate \
     +quit
 RUN mkdir /home/gmod/mounts && mv /home/gmod/temp/cstrike /home/gmod/mounts/cstrike
@@ -43,9 +48,6 @@ RUN mkdir -p /home/gmod/.steam/sdk32 \
 # SET GMOD MOUNT CONTENT
 RUN echo '"mountcfg" {"cstrike" "/home/gmod/mounts/cstrike"}' > /home/gmod/server/garrysmod/cfg/mount.cfg
 
-# CREATE DATABASE FILE
-RUN touch /home/gmod/server/garrysmod/sv.db
-
 # CREATE CACHE FOLDERS
 RUN mkdir -p /home/gmod/server/steam_cache/content && mkdir -p /home/gmod/server/garrysmod/cache/srcds
 
@@ -54,6 +56,11 @@ RUN mkdir -p /home/gmod/server/steam_cache/content && mkdir -p /home/gmod/server
 EXPOSE 27015
 EXPOSE 27015/udp
 EXPOSE 27005/udp
+
+# data/ is a volume so gamemode data + sv.db survive recreation (sv.db symlinked in).
+RUN mkdir -p /home/gmod/server/garrysmod/data \
+    && ln -sf data/sv.db /home/gmod/server/garrysmod/sv.db
+VOLUME ["/home/gmod/server/garrysmod/data"]
 
 # SET ENVIRONMENT VARIABLES
 ENV MAXPLAYERS="16"

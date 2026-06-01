@@ -1,0 +1,108 @@
+name: Docker Image CI
+
+on:
+  # Rebuild monthly to pick up Steam/GMod updates; trigger manually to publish
+  # source changes. No build on push - that would rebuild multi-GB images on
+  # every merge.
+  schedule:
+    - cron: 0 0 1 * *
+  workflow_dispatch:
+
+# Only one build run at a time; a new run cancels an in-progress one.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v4
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # The four debian variants come from one Dockerfile and share a single cache
+    # scope. Building them in order in the same job lets the root/x64 tags reuse
+    # the SteamCMD download layers already built for their siblings, and the gha
+    # cache carries those layers across runs (so the monthly rebuild is fast).
+    - name: debian (+ latest)
+      uses: docker/build-push-action@v7
+      with:
+        push: true
+        file: Dockerfile
+        tags: |
+          ceifa/garrysmod:debian
+          ceifa/garrysmod:latest
+        cache-from: type=gha,scope=debian
+        cache-to: type=gha,mode=max,scope=debian
+
+    - name: debian-root
+      uses: docker/build-push-action@v7
+      with:
+        push: true
+        file: Dockerfile
+        tags: ceifa/garrysmod:debian-root
+        build-args: FINAL_USER=root
+        cache-from: type=gha,scope=debian
+        cache-to: type=gha,mode=max,scope=debian
+
+    - name: debian-x64
+      uses: docker/build-push-action@v7
+      with:
+        push: true
+        file: Dockerfile
+        tags: ceifa/garrysmod:debian-x64
+        build-args: |
+          STEAM_BETA=-beta x86-64
+          SRCDS_BINARY=srcds_run_x64
+        cache-from: type=gha,scope=debian
+        cache-to: type=gha,mode=max,scope=debian
+
+    - name: debian-x64-root
+      uses: docker/build-push-action@v7
+      with:
+        push: true
+        file: Dockerfile
+        tags: ceifa/garrysmod:debian-x64-root
+        build-args: |
+          STEAM_BETA=-beta x86-64
+          SRCDS_BINARY=srcds_run_x64
+          FINAL_USER=root
+        cache-from: type=gha,scope=debian
+        cache-to: type=gha,mode=max,scope=debian
+
+    - name: debian-post
+      uses: docker/build-push-action@v7
+      with:
+        push: true
+        file: debian-post.Dockerfile
+        tags: ceifa/garrysmod:debian-post
+        cache-from: type=gha,scope=debian-post
+        cache-to: type=gha,mode=max,scope=debian-post
+
+    - name: debian-post-root
+      uses: docker/build-push-action@v7
+      with:
+        push: true
+        file: debian-post.Dockerfile
+        tags: ceifa/garrysmod:debian-post-root
+        build-args: FINAL_USER=root
+        cache-from: type=gha,scope=debian-post
+        cache-to: type=gha,mode=max,scope=debian-post
+
+    - name: ubuntu
+      uses: docker/build-push-action@v7
+      with:
+        push: true
+        file: ubuntu.Dockerfile
+        tags: ceifa/garrysmod:ubuntu
+        cache-from: type=gha,scope=ubuntu
+        cache-to: type=gha,mode=max,scope=ubuntu

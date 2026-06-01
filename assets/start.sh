@@ -1,32 +1,34 @@
 #!/bin/bash
+SERVER_ARGS=()
+
 if [ -n "${NAME}" ];
 then
-    ARGS="+hostname \"${NAME}\" ${ARGS}"
+    SERVER_ARGS+=(+hostname "${NAME}")
 fi
 
 if [ -n "${GSLT}" ];
 then
-    ARGS="+sv_setsteamaccount \"${GSLT}\" ${ARGS}"
+    SERVER_ARGS+=(+sv_setsteamaccount "${GSLT}")
 fi
 
 if [ -n "${AUTHKEY}" ];
 then
-    ARGS="-authkey \"${AUTHKEY}\" ${ARGS}"
+    SERVER_ARGS+=(-authkey "${AUTHKEY}")
 fi
 
 if [ -n "${PRODUCTION}" ] && [ "${PRODUCTION}" -ne 0 ];
 then
     MODE="production"
-    ARGS="-disableluarefresh ${ARGS}"
+    SERVER_ARGS+=(-disableluarefresh)
 else
     MODE="development"
-    ARGS="-gdb gdb -debug ${ARGS}"
+    SERVER_ARGS+=(-gdb gdb -debug)
 fi
 
-# START THE SERVER
 echo "Starting server on ${MODE} mode..."
 
-/home/gmod/server/srcds_run \
+# exec so srcds becomes PID 1 and receives signals directly (clean shutdown).
+exec /home/gmod/server/"${SRCDS_BINARY:-srcds_run}" \
     -game garrysmod \
     -norestart \
     -strictportbind \
@@ -36,4 +38,4 @@ echo "Starting server on ${MODE} mode..."
     -port "${PORT}" \
     -maxplayers "${MAXPLAYERS}" \
     +gamemode "${GAMEMODE}" \
-    +map "${MAP}" "${ARGS}"
+    +map "${MAP}" "${SERVER_ARGS[@]}" ${ARGS}
