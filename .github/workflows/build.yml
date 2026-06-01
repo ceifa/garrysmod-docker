@@ -18,6 +18,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # These images total tens of GB; reclaim the runner's preinstalled tooling
+    # (Android SDK, .NET, GHC, CodeQL...) so the builds don't run out of disk.
+    - name: Free up disk space
+      run: |
+        sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+          /opt/hostedtoolcache/CodeQL /usr/local/share/boost /usr/local/.ghcup
+        sudo docker image prune -af || true
+        df -h /
+
     - uses: actions/checkout@v6
 
     - name: Set up Docker Buildx
@@ -29,10 +38,11 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # The four debian variants come from one Dockerfile and share a single cache
-    # scope. Building them in order in the same job lets the root/x64 tags reuse
-    # the SteamCMD download layers already built for their siblings, and the gha
-    # cache carries those layers across runs (so the monthly rebuild is fast).
+    # The four debian variants share one Dockerfile; building them in order in the
+    # same job lets the root/x64 tags reuse the SteamCMD layers from their siblings
+    # (via the buildx builder's local cache). No gha cache - it overflows the 10GB
+    # limit, doubles disk via mode=max export, and would serve stale content on the
+    # monthly rebuild.
     - name: debian (+ latest)
       uses: docker/build-push-action@v7
       with:
@@ -41,8 +51,6 @@ jobs:
         tags: |
           ceifa/garrysmod:debian
           ceifa/garrysmod:latest
-        cache-from: type=gha,scope=debian
-        cache-to: type=gha,mode=max,scope=debian
 
     - name: debian-root
       uses: docker/build-push-action@v7
@@ -51,8 +59,6 @@ jobs:
         file: Dockerfile
         tags: ceifa/garrysmod:debian-root
         build-args: FINAL_USER=root
-        cache-from: type=gha,scope=debian
-        cache-to: type=gha,mode=max,scope=debian
 
     - name: debian-x64
       uses: docker/build-push-action@v7
@@ -63,8 +69,6 @@ jobs:
         build-args: |
           STEAM_BETA=-beta x86-64
           SRCDS_BINARY=srcds_run_x64
-        cache-from: type=gha,scope=debian
-        cache-to: type=gha,mode=max,scope=debian
 
     - name: debian-x64-root
       uses: docker/build-push-action@v7
@@ -76,8 +80,6 @@ jobs:
           STEAM_BETA=-beta x86-64
           SRCDS_BINARY=srcds_run_x64
           FINAL_USER=root
-        cache-from: type=gha,scope=debian
-        cache-to: type=gha,mode=max,scope=debian
 
     - name: debian-post
       uses: docker/build-push-action@v7
@@ -85,8 +87,6 @@ jobs:
         push: true
         file: debian-post.Dockerfile
         tags: ceifa/garrysmod:debian-post
-        cache-from: type=gha,scope=debian-post
-        cache-to: type=gha,mode=max,scope=debian-post
 
     - name: debian-post-root
       uses: docker/build-push-action@v7
@@ -95,8 +95,11 @@ jobs:
         file: debian-post.Dockerfile
         tags: ceifa/garrysmod:debian-post-root
         build-args: FINAL_USER=root
-        cache-from: type=gha,scope=debian-post
-        cache-to: type=gha,mode=max,scope=debian-post
+
+    # ubuntu shares no layers with the debian images (different base), so reclaim
+    # their build cache first to keep peak disk down.
+    - name: Reclaim space before ubuntu
+      run: docker buildx prune -af && df -h /
 
     - name: ubuntu
       uses: docker/build-push-action@v7
@@ -104,5 +107,3 @@ jobs:
         push: true
         file: ubuntu.Dockerfile
         tags: ceifa/garrysmod:ubuntu
-        cache-from: type=gha,scope=ubuntu
-        cache-to: type=gha,mode=max,scope=ubuntu
