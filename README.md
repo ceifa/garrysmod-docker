@@ -65,6 +65,15 @@ Set the server GSLT credential to be used.
 
 Set any other custom args you want to pass to srcds runner.
 
+**`AUTOUPDATE`**
+
+Update the server via Steam on each start. Possible values are `1` (default) or `0`.
+
+**`PUID`** / **`PGID`**
+
+The user/group id the server runs as. Default is `1000`. Set to match the owner of your
+bind mounts — see [Bind mounts & file permissions](#bind-mounts--file-permissions).
+
 ### Directory structure
 It's not the full directory tree, I just put the ones I thought most important
 
@@ -83,8 +92,9 @@ It's not the full directory tree, I just put the ones I thought most important
 |  |  |__📁lua
 |  |  |__💾sv.db // Symlinked into data/ so it survives container recreation
 |  |__📃srcds_run
-|__📃start.sh // Script to start the server
-|__📃update.txt // Steam cmd script (generated on build, re-run for -autoupdate)
+|__📃entrypoint.sh // Applies PUID/PGID, fixes mount ownership, then drops to the server user
+|__📃start.sh // Updates via Steam (once), then launches srcds
+|__📃update.txt // Steam cmd script (generated on build, re-run on each start)
 ```
 
 ### Persistence
@@ -104,6 +114,16 @@ docker run \
 
 `addons` and `gamemodes` are intentionally **not** volumes so they can be baked
 into a derived image (see the `FROM ceifa/garrysmod` example below) or bind-mounted.
+
+### Bind mounts & file permissions
+
+The server runs as uid `1000`. If your bind-mounted `addons`/`gamemodes`/`data` are
+owned by another user and aren't world-readable, srcds can't read them and crashes on
+startup (the container reports this and exits instead of looping).
+
+* **Linux:** run with `-e PUID=$(id -u) -e PGID=$(id -g)`, or `chown` the folders to `1000`.
+* **Windows:** `PUID`/`chown` don't apply to `C:\` mounts. Keep the project in the WSL2
+  filesystem (e.g. `~/gmod`), or use one of the `*-root` images (which run as root).
 
 ## Examples
 
@@ -166,7 +186,7 @@ This image contains a health check to continually ensure the server is online. T
 
 ```sh
 CONTAINER ID        IMAGE                    COMMAND                 CREATED             STATUS                    PORTS                                                                                     NAMES
-e9c073a4b262        ceifa/garrysmod:latest        "/home/gmod/start.sh"   21 minutes ago      Up 21 minutes (healthy)   0.0.0.0:27005->27005/tcp, 27005/udp, 0.0.0.0:27015->27015/tcp, 0.0.0.0:27015->27015/udp   distracted_cerf
+e9c073a4b262        ceifa/garrysmod:latest        "/home/gmod/entrypoi…"   21 minutes ago      Up 21 minutes (healthy)   0.0.0.0:27005->27005/tcp, 27005/udp, 0.0.0.0:27015->27015/tcp, 0.0.0.0:27015->27015/udp   distracted_cerf
 ```
 
 You can also query the container's health in a script friendly way:

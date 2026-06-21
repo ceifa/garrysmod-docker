@@ -10,7 +10,7 @@ RUN dpkg --add-architecture i386 \
     && apt-get -y --no-install-recommends --no-install-suggests install \
         wget ca-certificates tar lib32gcc-s1 libgcc-s1 libcurl4-gnutls-dev:i386 \
         libcurl4:i386 libtinfo6:i386 lib32z1 lib32stdc++6 libncurses6:i386 \
-        libcurl3-gnutls:i386 gdb libsdl2-2.0-0:i386 libfontconfig1 net-tools unzip \
+        libcurl3-gnutls:i386 gdb libsdl2-2.0-0:i386 libfontconfig1 net-tools unzip gosu \
     && apt-get clean \
     && rm -rf /tmp/* /var/lib/apt/lists/*
 
@@ -68,11 +68,18 @@ ENV GAMEMODE="sandbox"
 ENV MAP="gm_construct"
 ENV PORT="27015"
 
+COPY --chown=steam:steam assets/entrypoint.sh /home/gmod/entrypoint.sh
 COPY --chown=steam:steam assets/start.sh /home/gmod/start.sh
 COPY --chown=steam:steam assets/health.sh /home/gmod/health.sh
-RUN chmod +x /home/gmod/start.sh /home/gmod/health.sh
+RUN chmod +x /home/gmod/entrypoint.sh /home/gmod/start.sh /home/gmod/health.sh
 
 HEALTHCHECK --start-period=10s \
     CMD /home/gmod/health.sh
 
+# Entrypoint runs as root (PUID/PGID remap), then drops to GMOD_USER.
+ARG FINAL_USER=steam
+ENV GMOD_USER=${FINAL_USER}
+USER root
+
+ENTRYPOINT ["/home/gmod/entrypoint.sh"]
 CMD ["/home/gmod/start.sh"]

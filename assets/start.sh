@@ -25,6 +25,15 @@ else
     SERVER_ARGS+=(-gdb gdb -debug)
 fi
 
+# Update once here instead of via srcds_run's -autoupdate, which forces a crash-restart
+# loop. Then run once with -norestart and let Docker's restart policy handle recovery.
+if [ "${AUTOUPDATE:-1}" != "0" ];
+then
+    echo "Updating server using Steam..."
+    /home/gmod/steamcmd/steamcmd.sh +runscript /home/gmod/update.txt +quit \
+        || echo "WARNING: Steam update failed; starting with the installed version."
+fi
+
 echo "Starting server on ${MODE} mode..."
 
 # exec so srcds becomes PID 1 and receives signals directly (clean shutdown).
@@ -32,9 +41,6 @@ exec /home/gmod/server/"${SRCDS_BINARY:-srcds_run}" \
     -game garrysmod \
     -norestart \
     -strictportbind \
-    -autoupdate \
-    -steam_dir "/home/gmod/steamcmd" \
-    -steamcmd_script "/home/gmod/update.txt" \
     -port "${PORT}" \
     -maxplayers "${MAXPLAYERS}" \
     +gamemode "${GAMEMODE}" \
